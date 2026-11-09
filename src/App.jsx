@@ -2,25 +2,25 @@ import { useMemo, useState } from "react";
 import Header from "./components/Header.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import ProjectList from "./components/ProjectList.jsx";
-import ProjectForm from "./components/ProjectForm.jsx";
-import useLocalStorage from "./hooks/useLocalStorage.js";
+import ProjectForm from "./components/ProjectForm.jsx;
 import { seedProjects } from "./data/projects.js";
 
 // App owns `projects` and `query` because SearchBar, ProjectList and ProjectForm
 // all depend on them (state lives in the nearest common parent).
  function App() {
-  const [projects, setProjects] = useLocalStorage("portfolio-projects", seedProjects);
+  const [projects, setProjects] = useState(seedProjects);
   const [query, setQuery] = useState("");
   const [category, setcategory] = useState("All");
 
-  // Case-insensitive match on title, category and description.
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return projects;
-    return projects.filter((p) =>
-      [p.title, p.category, p.description].some((f) => f.toLowerCase().includes(q))
-    );
-  }, [projects, query]);
+  const categories = ["All", ...new set(projects.map((p) => p.category))];
+
+  const q = query.trim().toLowerCase();
+  const visible = projects.filter((p) => {
+    const matchesCategory = category === "All" || p.category === category;
+    const matchesQuery =
+      !q || [p.title, p.category, p.description].some((f) => f.toLowerCase().includes(q));
+    return matchesCategory && matchesQuery;
+  });
 
   const addProject = (project) =>
     setProjects((prev) => [{ ...project, id: Date.now() }, ...prev]);
