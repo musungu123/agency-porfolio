@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Theme colours are CSS variables, so light/dark switching needs no dark: classes. */
+:root { --ink:#1d2a2f; --paper:#fbfaf7; --accent:#2a6f6b; --line:#d9d6cc; --card:#fff; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#eef0ea; --paper:#14191b; --accent:#7cc7c0; --line:#2c3538; --card:#1c2326; }
+}
+
+/* "inline" makes utilities like bg-paper read the variables above directly. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Work Sans", system-ui, sans-serif;
+}
+
+@layer base {
+  body { @apply bg-paper font-body text-ink; }
+  :focus-visible { @apply outline-[3px] outline-offset-2 outline-accent; }
+}
